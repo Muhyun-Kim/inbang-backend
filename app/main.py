@@ -7,6 +7,13 @@ from typing import List
 from contextlib import asynccontextmanager
 from apscheduler.schedulers.background import BackgroundScheduler
 import time
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+DATABASE_URL = "sqlite:///./inbang.sqlite3"
+
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 class PuuidRes(BaseModel):
@@ -66,7 +73,11 @@ api_endpoint = {
 
 
 @app.get("/riot")
-def read_root():
+def root_riot():
+    return {"message": "Hello, World!"}
+
+
+def init_riot_rank():
     streamer_rank_list: List[StreamerRank] = []
     for streamer in streamer_data:
         puuid_res = get_puuid(streamer.lolNickname, streamer.lolTag)
@@ -103,16 +114,9 @@ def get_rank(puuid: str) -> RankRes:
         )
 
 
-def my_job():
-    print(f"⏰ 주기적 실행: {time.strftime('%X')}")
-
-
-@app.on_event("startup")
-def startup_event():
-    scheduler.add_job(my_job, "interval", seconds=10)  # 10초마다 실행
-    scheduler.start()
-
-
-@app.on_event("shutdown")
-def shutdown_event():
-    scheduler.shutdown()
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

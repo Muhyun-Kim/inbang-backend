@@ -1,4 +1,4 @@
-from fastapi import HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from app.db.database import SessionLocal
 from app.lib.constants.streamer import Streamer, streamer_data
@@ -52,6 +52,7 @@ class ApiRankWithStreamer(BaseModel):
 
 
 def init_riot_rank():
+    print("🔄 리그 오브 레전드 랭크 초기화 중...")
     streamer_rank_list: List[ApiRankWithStreamer] = []
     for streamer in streamer_data:
         puuid_res = get_puuid(streamer.lolNickname, streamer.lolTag)
@@ -63,10 +64,10 @@ def init_riot_rank():
                 leaguePoints=rank_res.leaguePoints,
             )
         )
-    print(streamer_rank_list)
     db = SessionLocal()
     try:
-        save_rank(streamer_rank_list, db=db)
+        res = save_rank(streamer_rank_list, db=db)
+        print(res)
     finally:
         db.close()
     return {"rank": streamer_rank_list}

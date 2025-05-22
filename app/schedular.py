@@ -16,7 +16,7 @@ def my_job():
 
 @asynccontextmanager
 async def lifespan(app):
-    scheduler.add_job(init_riot_rank, "interval", seconds=60)
+    scheduler.add_job(init_riot_rank, "interval", seconds=300)
     scheduler.start()
     print("✅ 스케줄러 시작됨")
 

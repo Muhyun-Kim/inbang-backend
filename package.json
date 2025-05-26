@@ -18,10 +18,12 @@
   "homepage": "https://github.com/Muhyun-Kim/inbang-backend#readme",
   "description": "",
   "dependencies": {
+    "@prisma/client": "^6.8.2",
     "axios": "^1.9.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "node-cron": "^4.0.7"
+    "node-cron": "^4.0.7",
+    "prisma": "^6.8.2"
   },
   "devDependencies": {
     "@types/express": "^5.0.2",

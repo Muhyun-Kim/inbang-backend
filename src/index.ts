@@ -1,16 +1,17 @@
 import express from "express";
+import "dotenv/config";
+import { startScheduledJob } from "./schedular";
+import { initRiotRank } from "./api/riot";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server ready: http://localhost:${PORT}`);
 });
 
-app.get("/test", (req, res) => {
-  res.send("test");
+startScheduledJob();
+
+app.get("/streamer/lol-rank", (_, res) => {
+  res.json({ message: "Hello World" });
 });

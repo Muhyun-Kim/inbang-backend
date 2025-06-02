@@ -13,9 +13,10 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model StreamerRank {
+model LolStreamerRank {
   id           Int    @id @default(autoincrement())
   streamer     String @unique
+  platform     String
   tier         String
   leaguePoints Int
 }

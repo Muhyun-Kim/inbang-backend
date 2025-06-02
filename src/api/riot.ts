@@ -10,6 +10,7 @@ interface ApiRankWithStreamer {
   streamer: string;
   tier: string;
   leaguePoints: number;
+  platform: string;
 }
 
 export const initRiotRank = async () => {
@@ -32,6 +33,7 @@ export const initRiotRank = async () => {
         streamer: streamer.nickname,
         tier: rank.tier,
         leaguePoints: rank.leaguePoints,
+        platform: streamer.platform,
       });
     }
     await saveRank({ rankWithStreamer: streamerRankList });
@@ -119,7 +121,7 @@ const saveRank = async ({
 }) => {
   for (const rank of rankWithStreamer) {
     console.log(rank);
-    await prisma.streamerRank.upsert({
+    await prisma.lolStreamerRank.upsert({
       where: { streamer: rank.streamer },
       update: {
         tier: rank.tier,
@@ -129,6 +131,7 @@ const saveRank = async ({
         streamer: rank.streamer,
         tier: rank.tier,
         leaguePoints: rank.leaguePoints,
+        platform: rank.platform,
       },
     });
   }

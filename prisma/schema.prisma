@@ -13,10 +13,34 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+enum Platform {
+  CHZZK
+  SOOP
+}
+
+model Streamer {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  platform    Platform
+  RiotAccount RiotAccount[]
+}
+
+model RiotAccount {
+  id         Int     @id @default(autoincrement())
+  streamerId Int
+  gameName   String
+  tagLine    String
+  puuid      String? @unique
+
+  streamer        Streamer          @relation(fields: [streamerId], references: [id])
+  LolStreamerRank LolStreamerRank[]
+}
+
 model LolStreamerRank {
-  id           Int    @id @default(autoincrement())
-  streamer     String @unique
-  platform     String
-  tier         String
-  leaguePoints Int
+  id            Int    @id @default(autoincrement())
+  riotAccountId Int    @unique
+  tier          String
+  leaguePoints  Int
+
+  riotAccount RiotAccount @relation(fields: [riotAccountId], references: [id])
 }

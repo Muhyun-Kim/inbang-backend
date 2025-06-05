@@ -1,9 +1,9 @@
 import express from "express";
 import "dotenv/config";
 import { startScheduledJob } from "./schedular";
-import { prisma } from "./db";
 import { getLive } from "./api/chzzk";
-import { savePuuid, updateRank } from "./api/riot";
+import { updateRank } from "./api/riot";
+import streamerRouter from "./routes/streamer.route";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -14,18 +14,8 @@ app.listen(PORT, () => {
 
 startScheduledJob();
 
-app.get("/streamer/lol-rank", async (req, res) => {
-  // const { platform } = req.query as { platform?: string };
-  // const streamerRank = await prisma.lolStreamerRank.findMany({
-  //   where: {
-  //     ...(platform && { platform }),
-  //   },
-  //   orderBy: {
-  //     leaguePoints: "desc",
-  //   },
-  // });
-  // res.json({ streamerRank });
-});
+// streamer
+app.use("/streamer", streamerRouter);
 
 app.get("/chzzk/live/:gameName", async (req, res) => {
   const { gameName } = req.params as { gameName: string };
